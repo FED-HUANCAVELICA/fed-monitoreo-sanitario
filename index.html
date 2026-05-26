@@ -37,6 +37,8 @@
             font-weight: 700;
             letter-spacing: -0.5px;
         }
+        .fs-7 { font-size: 0.875rem; }
+        .fs-8 { font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -56,7 +58,6 @@
         
         <!-- SECCIÓN 1: PANELES KPI MAESTROS (Fila Superior) -->
         <div class="row g-3 mb-4">
-            <!-- KPI Maestro: EI-03.01 Mantenimiento Preventivo -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-primary">
                     <div class="d-flex justify-content-between align-items-center">
@@ -72,7 +73,6 @@
                 </div>
             </div>
 
-            <!-- KPI Maestro: AI-05.01 Control de Cloro Residual -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-success">
                     <div class="d-flex justify-content-between align-items-center">
@@ -88,14 +88,13 @@
                 </div>
             </div>
 
-            <!-- KPI de Inversión Total Sectorial -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-info">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Presupuesto Sanitario</h6>
                             <h3 class="fw-bold m-0">S/. 22,213.02</h3>
-                            <small class="text-muted">Monto total programado en muestra</small>
+                            <small class="text-muted">Monto total programado en muestra[cite: 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]</small>
                         </div>
                         <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info">
                             <i class="bi bi-cash-coin fs-3"></i>
@@ -104,14 +103,13 @@
                 </div>
             </div>
 
-            <!-- KPI de Estado Regulatorio Crítico -->
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-warning">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Alertas Activas</h6>
-                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">1 Critica</h3>
-                            <small class="text-muted">IIEE en riesgo regulatorio (Angaraes)[cite: 15]</small>
+                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">Calculando...</h3>
+                            <small class="text-muted">IIEE en riesgo regulatorio[cite: 1, 15]</small>
                         </div>
                         <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning">
                             <i class="bi bi-exclamation-triangle fs-3"></i>
@@ -123,23 +121,18 @@
 
         <!-- SECCIÓN 2: GRID ASIMÉTRICO (Layout Principal de Auditoría) -->
         <div class="row g-4">
-            <!-- Panel Izquierdo: Tabla Comando Nominal (Ancho Expandido) -->
-            <div class="col-12 col-xl-12">
+            <div class="col-12">
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
                             <h5 class="fw-bold m-0 text-dark">Monitoreo Nominal de las 14 IIEE Estratégicas</h5>
                             <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)[cite: 1, 2]</p>
                         </div>
-                        <div class="d-flex gap-2">
-                            <span class="badge bg-light text-dark border"><i class="bi bi-funnel me-1"></i> Filtros dinámicos activos</span>
-                        </div>
                     </div>
 
-                    <!-- Estructura de Datos Nominal -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
-                            <thead class="table-light text-uppercase fs-7 font-monospace">
+                            <thead class="table-light text-uppercase fs-8 font-monospace">
                                 <tr>
                                     <th style="width: 10%">Cód. Local</th>
                                     <th style="width: 25%">Institución Educativa</th>
@@ -151,17 +144,136 @@
                                 </tr>
                             </thead>
                             <tbody id="tabla-nominal-cuerpo" class="fs-7">
-                                <!-- Las filas se inyectan dinámicamente mediante el script JS -->
+                                <!-- Datos inyectados dinámicamente -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- Integración con el motor lógico del sistema en GitHub Pages -->
-    <script src="app.js"></script>
+    <!-- MOTOR LOGICO SUBTERRÁNEO INTEGRADO -->
+    <script>
+        // PEGA TU ENLACE DE GOOGLE SHEETS (CSV) AQUÍ ABAJO
+        const URL_LIVE_CSV = "TU_ENLACE_AQUÍ";
+
+        async function cargarDashboardSanitario() {
+            try {
+                const respuesta = await fetch(URL_LIVE_CSV);
+                const dataTexto = await respuesta.text();
+                
+                const lineas = dataTexto.split("\n").map(linea => linea.split(","));
+                const iieeMaestro = [];
+                let alertasCriticas = 0;
+
+                for (let i = 1; i < lineas.length; i++) {
+                    const fila = lineas[i];
+                    if (!fila || fila.length < 10) continue;
+                    
+                    const ie = {
+                        codigoLocal: fila[0]?.trim() || "",
+                        nombre: fila[1]?.trim() || "",
+                        ugel: fila[2]?.trim() || "",
+                        distrito: fila[3]?.trim() || "",
+                        responsable: fila[4]?.trim() || "",
+                        telefono: fila[5]?.trim() || "",
+                        f1_fam: parseFloat(fila[6]) || 0,
+                        f1_pca: parseFloat(fila[7]) || 0,
+                        f1_dg: parseFloat(fila[8]) || 0,
+                        montoSanitario: parseFloat(fila[9]) || 0,
+                        cloroMeses: [
+                            parseFloat(fila[10]) || 0, parseFloat(fila[11]) || 0, parseFloat(fila[12]) || 0, 
+                            parseFloat(fila[13]) || 0, parseFloat(fila[14]) || 0, parseFloat(fila[15]) || 0, 
+                            parseFloat(fila[16]) || 0
+                        ],
+                        sistemasCruzados: parseFloat(fila[17]) || 0,
+                        ultimaLlamada: fila[18]?.trim() || "--/--/----",
+                        observaciones: fila[19]?.trim() || "",
+                        urlFoto: fila[20]?.trim() || ""
+                    };
+                    
+                    if(ie.f1_fam === 0.50) alertasCriticas++;
+                    iieeMaestro.push(ie);
+                }
+
+                document.getElementById("kpi-alertas").innerText = `${alertasCriticas} Crítica(s)`;
+                procesarMetricasGerenciales(iieeMaestro);
+
+            } catch (error) {
+                console.error("Error en el pipeline de datos:", error);
+                document.getElementById("kpi-alertas").innerText = "Error link";
+            }
+        }
+
+        function procesarMetricasGerenciales(iiee) {
+            let cumplidosMantenimiento = 0;
+            let cumplidosCloro = 0;
+            const totalIIEE = iiee.length;
+
+            iiee.forEach(ie => {
+                const cumpleMto = (ie.f1_fam === 1.00 && ie.f1_pca === 1.00 && ie.f1_dg === 1.00 && ie.montoSanitario > 0);
+                if (cumpleMto) cumplidosMantenimiento++;
+
+                const totalMesesOK = ie.cloroMeses.reduce((acc, val) => acc + val, 0);
+                const cumpleCloro = (cumpleMto && totalMesesOK >= 5 && ie.sistemasCruzados >= 2);
+                if (cumpleCloro) cumplidosCloro++;
+
+                renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK);
+            });
+
+            document.getElementById("kpi-ei-03").innerText = `${cumplidosMantenimiento} / ${totalIIEE} (${((cumplidosMantenimiento/totalIIEE)*100).toFixed(1)}%)`;
+            document.getElementById("kpi-ai-05").innerText = `${cumplidosCloro} / ${cumplidosMantenimiento || 1} (${cumplidosMantenimiento > 0 ? ((cumplidosCloro/cumplidosMantenimiento)*100).toFixed(1) : 0.0}%)`;
+        }
+
+        function renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK) {
+            const tablaCuerpo = document.getElementById("tabla-nominal-cuerpo");
+            
+            const badgeFAM = ie.f1_fam === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : (ie.f1_fam === 0.50 ? '<span class="badge bg-warning text-dark">⏳ EN REVISIÓN</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>');
+            const badgePCA = ie.f1_pca === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
+            const badgeDG = ie.f1_dg === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
+
+            const controlFoto = ie.urlFoto !== "" && ie.urlFoto.startsWith("http")
+                ? `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-outline-success fw-bold"><i class="bi bi-camera me-1"></i> Ver Foto</a>` 
+                : '<span class="text-muted small font-monospace"><i class="bi bi-camera-video-off me-1"></i> Sin visita</span>';
+
+            const filaHTML = `
+                <tr class="${ie.f1_fam === 0.50 ? 'table-warning bg-opacity-10' : ''}">
+                    <td><span class="badge bg-dark font-monospace">${ie.codigoLocal}</span></td>
+                    <td>
+                        <span class="fw-bold text-dark d-block">${ie.nombre}</span>
+                        <small class="text-muted text-uppercase fs-8 font-monospace">${ie.ugel} ➔ ${ie.distrito}</small>
+                    </td>
+                    <td>
+                        <div class="d-grid">
+                            <a href="tel:${ie.telefono}" class="btn btn-sm btn-outline-primary text-start font-monospace py-1">
+                                <i class="bi bi-telephone-outbound me-1"></i> ${ie.responsable}
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="small d-flex flex-column gap-1">
+                            <div>FAM: ${badgeFAM}</div>
+                            <div>PCA: ${badgePCA}</div>
+                            <div>DG: ${badgeDG}</div>
+                            <div class="fw-bold text-secondary">Inversión: S/. ${ie.montoSanitario.toFixed(2)}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-${totalMesesOK >= 5 ? 'success' : 'danger'} fs-6">${totalMesesOK} / 7 Meses</div>
+                        <small class="text-muted d-block font-monospace">Plataformas: ${ie.sistemasCruzados.toFixed(0)} / 2</small>
+                    </td>
+                    <td>${controlFoto}</td>
+                    <td>
+                        <small class="text-secondary d-block font-monospace fw-bold">Llamada: ${ie.ultimaLlamada}</small>
+                        <p class="m-0 text-muted lh-sm" style="font-size: 0.8rem;">${ie.observaciones}</p>
+                    </td>
+                </tr>
+            `;
+            tablaCuerpo.insertAdjacentHTML("beforeend", filaHTML);
+        }
+
+        document.addEventListener("DOMContentLoaded", cargarDashboardSanitario);
+    </script>
 </body>
 </html>
