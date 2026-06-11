@@ -64,7 +64,7 @@
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Avance EI-03.01</h6>
                             <h3 class="fw-bold m-0" id="kpi-ei-03">0 / 14 (0.0%)</h3>
-                            <small class="text-muted">IIEE con FAM/PCA/DG verificadas[cite: 1]</small>
+                            <small class="text-muted">IIEE con FAM/PCA/DG verificadas</small>
                         </div>
                         <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
                             <i class="bi bi-tools fs-3"></i>
@@ -78,7 +78,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Avance AI-05.01</h6>
-                            <h3 class="fw-bold m-0" id="kpi-ai-05">0 / 0 (0.0%)</h3>
+                            <h3 class="fw-bold m-0" id="kpi-ai-05">0 / 14 (0.0%)</h3>
                             <small class="text-muted">Sostenibilidad & Cloro (&ge; 5 Meses)</small>
                         </div>
                         <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success">
@@ -94,7 +94,7 @@
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Presupuesto Sanitario</h6>
                             <h3 class="fw-bold m-0">S/. 22,213.02</h3>
-                            <small class="text-muted">Monto total programado en muestra[cite: 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]</small>
+                            <small class="text-muted">Monto total programado en muestra</small>
                         </div>
                         <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info">
                             <i class="bi bi-cash-coin fs-3"></i>
@@ -108,8 +108,8 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Alertas Activas</h6>
-                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">1 Crítica(s)</h3>
-                            <small class="text-muted">IIEE en riesgo regulatorio[cite: 1, 15]</small>
+                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">Calculando...</h3>
+                            <small class="text-muted">IIEE en riesgo regulatorio</small>
                         </div>
                         <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning">
                             <i class="bi bi-exclamation-triangle fs-3"></i>
@@ -126,7 +126,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
                             <h5 class="fw-bold m-0 text-dark">Monitoreo Nominal de las 14 IIEE Estratégicas</h5>
-                            <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)[cite: 1, 2]</p>
+                            <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)</p>
                         </div>
                     </div>
 
@@ -139,8 +139,8 @@
                                     <th style="width: 18%">Contacto Director</th>
                                     <th style="width: 15%">Fase I: Administrativa</th>
                                     <th style="width: 12%">Fase II: Cloro Residual</th>
-                                    <th style="width: 12%">Medios de Verificación</th>
-                                    <th style="width: 13%">Bitácora de Campo</th>
+                                    <th style="width: 10%">Evidencia</th>
+                                    <th style="width: 10%">Bitácora de Campo</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla-nominal-cuerpo" class="fs-7">
@@ -153,8 +153,9 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONTINGENCIA FIJO -->
+    <!-- MOTOR LOGICO ORIGINAL CON TU NUEVO ENLACE API DE GOOGLE -->
     <script>
+        // ENLACE API CSV SUMINISTRADO Y AJUSTADO POR EL COORDINADOR TERRITORIAL
         const URL_LIVE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUQHWGzteuK4kAbiHd18j7NwpOj0zgf7kUJevJ1PFf-kZNdvB7EuXSL0A_6LWabdq6Uf_QQJDV7oWG/pub?gid=0&single=true&output=csv";
 
         async function cargarDashboardSanitario() {
@@ -162,16 +163,16 @@
                 const respuesta = await fetch(URL_LIVE_CSV);
                 const dataTexto = await respuesta.text();
                 
-                // Divisor básico lineal inmune a errores de script internos
-                const lineas = dataTexto.split("\n");
+                const lineas = dataTexto.split("\n").map(linea => linea.split(","));
                 const iieeMaestro = [];
+                let alertasCriticas = 0;
 
                 for (let i = 1; i < lineas.length; i++) {
-                    const fila = lineas[i].split(",");
+                    const fila = lineas[i];
                     if (!fila || fila.length < 10) continue;
                     
-                    // Si el código local contiene basura de Apps Script, saltar la fila rota
-                    if (fila[0].includes("function") || fila[0].includes("OBJECT")) continue;
+                    // Omite líneas con textos de cabeceras o dañadas por configuraciones externas
+                    if (fila[0].includes("CÓDIGO") || fila[0].includes("function") || fila[0].trim() === "") continue;
 
                     const ie = {
                         codigoLocal: fila[0]?.trim() || "",
@@ -192,27 +193,29 @@
                         sistemasCruzados: parseFloat(fila[17]) || 0,
                         ultimaLlamada: fila[18]?.trim() || "--/--/----",
                         observaciones: fila[19]?.trim() || "",
-                        // Campo de evidencia unificado (Soporta el enlace de fotos o documentos de Sheets)
                         urlFoto: fila[20]?.trim() || ""
                     };
                     
+                    if(ie.f1_fam === 0.50) alertasCriticas++;
                     iieeMaestro.push(ie);
                 }
 
+                document.getElementById("kpi-alertas").innerText = `${alertasCriticas} Crítica(s)`;
                 procesarMetricasGerenciales(iieeMaestro);
 
             } catch (error) {
-                console.error("Error en el pipeline:", error);
+                console.error("Error en el pipeline de datos:", error);
+                document.getElementById("kpi-alertas").innerText = "Error link";
             }
         }
 
         function procesarMetricasGerenciales(iiee) {
             let cumplidosMantenimiento = 0;
             let cumplidosCloro = 0;
-            const totalIIEE = 14; // Fijado por norma
+            const totalIIEE = 14;
 
             iiee.forEach(ie => {
-                const cumpleMto = (ie.f1_fam >= 1.00 && ie.f1_pca === 1.00 && ie.f1_dg === 1.00 && ie.montoSanitario > 0);
+                const cumpleMto = (ie.f1_fam === 1.00 && ie.f1_pca === 1.00 && ie.f1_dg === 1.00 && ie.montoSanitario > 0);
                 if (cumpleMto) cumplidosMantenimiento++;
 
                 const totalMesesOK = ie.cloroMeses.reduce((acc, val) => acc + val, 0);
@@ -229,18 +232,16 @@
         function renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK) {
             const tablaCuerpo = document.getElementById("tabla-nominal-cuerpo");
             
-            const badgeFAM = ie.f1_fam >= 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : (ie.f1_fam === 0.50 ? '<span class="badge bg-warning text-dark">⏳ EN REVISIÓN</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>');
+            const badgeFAM = ie.f1_fam === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : (ie.f1_fam === 0.50 ? '<span class="badge bg-warning text-dark">⏳ EN REVISIÓN</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>');
             const badgePCA = ie.f1_pca === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
             const badgeDG = ie.f1_dg === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
 
-            // BOTÓN DINÁMICO DE ARCHIVOS SOLICITADO POR EL JEFE
-            let controlEvidencia = '<span class="text-muted small font-monospace"><i class="bi bi-file-earmark-lock me-1"></i> Sin archivo</span>';
-            if (ie.urlFoto !== "" && ie.urlFoto.toLowerCase().startsWith("http")) {
-                controlEvidencia = `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-success fw-bold text-white w-100"><i class="bi bi-file-earmark-pdf me-1"></i> Abrir Sustento</a>`;
-            }
+            const controlFoto = ie.urlFoto !== "" && ie.urlFoto.toLowerCase().startsWith("http")
+                ? `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-outline-success fw-bold"><i class="bi bi-camera me-1"></i> Ver Foto</a>` 
+                : '<span class="text-muted small font-monospace"><i class="bi bi-camera-video-off me-1"></i> Sin visita</span>';
 
             const filaHTML = `
-                <tr>
+                <tr class="${ie.f1_fam === 0.50 ? 'table-warning bg-opacity-10' : ''}">
                     <td><span class="badge bg-dark font-monospace">${ie.codigoLocal}</span></td>
                     <td>
                         <span class="fw-bold text-dark d-block">${ie.nombre}</span>
@@ -265,7 +266,7 @@
                         <div class="fw-bold text-${totalMesesOK >= 5 ? 'success' : 'danger'} fs-6">${totalMesesOK} / 7 Meses</div>
                         <small class="text-muted d-block font-monospace">Plataformas: ${ie.sistemasCruzados.toFixed(0)} / 2</small>
                     </td>
-                    <td>${controlEvidencia}</td>
+                    <td>${controlFoto}</td>
                     <td>
                         <small class="text-secondary d-block font-monospace fw-bold">Llamada: ${ie.ultimaLlamada}</small>
                         <p class="m-0 text-muted lh-sm" style="font-size: 0.8rem;">${ie.observaciones}</p>
