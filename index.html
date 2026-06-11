@@ -4,46 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIDIS - FED 2026: Centro de Control Sanitario Huancavelica</title>
-    <!-- Bootstrap 5 CSS para Maquetación de Alta Dirección -->
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Iconos de Bootstrap para una UI Corporativa -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        .kpi-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
-        }
-        .kpi-card:hover {
-            transform: translateY(-2px);
-        }
-        .table-responsive {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 20px;
-        }
-        .badge {
-            font-weight: 600;
-            padding: 6px 10px;
-            border-radius: 6px;
-        }
-        .navbar-brand-custom {
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
+        body { background-color: #f4f6f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .kpi-card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .table-responsive { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 20px; }
+        .badge-admin { font-weight: 600; padding: 4px 8px; border-radius: 4px; text-decoration: none; display: inline-block; }
+        .badge-admin.online { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .badge-admin.online:hover { background-color: #bcd0c7; }
+        .badge-admin.offline { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
+        .navbar-brand-custom { font-weight: 700; letter-spacing: -0.5px; }
         .fs-7 { font-size: 0.875rem; }
         .fs-8 { font-size: 0.75rem; }
     </style>
 </head>
 <body>
 
-    <!-- Header Institucional Premium -->
+    <!-- Header -->
     <nav class="navbar navbar-dark bg-dark sticky-top px-4">
         <div class="container-fluid">
             <span class="navbar-brand navbar-brand-custom text-white d-flex align-items-center">
@@ -55,8 +34,7 @@
     </nav>
 
     <div class="container-fluid px-4 py-4">
-        
-        <!-- SECCIÓN 1: PANELES KPI MAESTROS (Fila Superior) -->
+        <!-- KPIs Maestros -->
         <div class="row g-3 mb-4">
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-primary">
@@ -64,88 +42,69 @@
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Avance EI-03.01</h6>
                             <h3 class="fw-bold m-0" id="kpi-ei-03">0 / 14 (0.0%)</h3>
-                            <small class="text-muted">IIEE con FAM/PCA/DG verificadas</small>
+                            <small class="text-muted">Fase Administrativa Completa</small>
                         </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
-                            <i class="bi bi-tools fs-3"></i>
-                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary"><i class="bi bi-folder-check fs-3"></i></div>
                     </div>
                 </div>
             </div>
-
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-success">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted text-uppercase small fw-bold">Avance AI-05.01</h6>
-                            <h3 class="fw-bold m-0" id="kpi-ai-05">0 / 14 (0.0%)</h3>
-                            <small class="text-muted">Sostenibilidad & Cloro (&ge; 5 Meses)</small>
+                            <h6 class="text-muted text-uppercase small fw-bold">Monitoreo Cloro</h6>
+                            <h3 class="fw-bold m-0" id="kpi-cloro-total">0 Meses</h3>
+                            <small class="text-muted">Consolidado Jun - Dic (Muestra)</small>
                         </div>
-                        <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success">
-                            <i class="bi bi-droplet-half fs-3"></i>
-                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success"><i class="bi bi-droplet fs-3"></i></div>
                     </div>
                 </div>
             </div>
-
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-info">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted text-uppercase small fw-bold">Presupuesto Sanitario</h6>
-                            <h3 class="fw-bold m-0">S/. 22,213.02</h3>
-                            <small class="text-muted">Monto total programado en muestra</small>
+                            <h6 class="text-muted text-uppercase small fw-bold">Cruce SUNASS Meta</h6>
+                            <h3 class="fw-bold m-0" id="kpi-sunass-cobertura">0 / 14</h3>
+                            <small class="text-muted">IIEE con reporte obligatorio</small>
                         </div>
-                        <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info">
-                            <i class="bi bi-cash-coin fs-3"></i>
-                        </div>
+                        <div class="bg-info bg-opacity-10 p-3 rounded-3 text-info"><i class="bi bi-activity fs-3"></i></div>
                     </div>
                 </div>
             </div>
-
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="card kpi-card bg-white p-3 border-start border-4 border-warning">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted text-uppercase small fw-bold">Alertas Activas</h6>
-                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">Calculando...</h3>
-                            <small class="text-muted">IIEE en riesgo regulatorio</small>
+                            <h6 class="text-muted text-uppercase small fw-bold">Alertas Operativas</h6>
+                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas-operativas">0 Activas</h3>
+                            <small class="text-muted">Cargas Extemporáneas detectadas</small>
                         </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning">
-                            <i class="bi bi-exclamation-triangle fs-3"></i>
-                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning"><i class="bi bi-alarm fs-3"></i></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN 2: GRID ASIMÉTRICO (Layout Principal de Auditoría) -->
+        <!-- Tabla de Monitoreo -->
         <div class="row g-4">
             <div class="col-12">
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div>
-                            <h5 class="fw-bold m-0 text-dark">Monitoreo Nominal de las 14 IIEE Estratégicas</h5>
-                            <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)</p>
-                        </div>
-                    </div>
-
+                    <h5 class="fw-bold text-dark mb-4">Panel Integrado de Control Sanitario (Fase I Administrativa & Fase II Operativa)</h5>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
                             <thead class="table-light text-uppercase fs-8 font-monospace">
                                 <tr>
-                                    <th style="width: 10%">Cód. Local</th>
-                                    <th style="width: 25%">Institución Educativa</th>
-                                    <th style="width: 18%">Contacto Director</th>
-                                    <th style="width: 15%">Fase I: Administrativa</th>
-                                    <th style="width: 12%">Fase II: Cloro Residual</th>
-                                    <th style="width: 10%">Evidencia</th>
-                                    <th style="width: 10%">Bitácora de Campo</th>
+                                    <th>Cód. Local</th>
+                                    <th>Institución Educativa</th>
+                                    <th>Contacto Director</th>
+                                    <th>Fase I: Medios Verificación</th>
+                                    <th>Fase II: Récord Cloro (Jun-Dic)</th>
+                                    <th>Sistemas Cruzados</th>
+                                    <th>Bitácora de Campo</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla-nominal-cuerpo" class="fs-7">
-                                <!-- Datos inyectados dinámicamente -->
-                            </tbody>
+                            <tbody id="tabla-nominal-cuerpo" class="fs-7"></tbody>
                         </table>
                     </div>
                 </div>
@@ -153,130 +112,123 @@
         </div>
     </div>
 
-    <!-- MOTOR LOGICO ORIGINAL CON TU NUEVO ENLACE API DE GOOGLE -->
     <script>
-        // ENLACE API CSV SUMINISTRADO Y AJUSTADO POR EL COORDINADOR TERRITORIAL
+        // Enlace optimizado Live-CSV del Coordinador Territorial
         const URL_LIVE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUQHWGzteuK4kAbiHd18j7NwpOj0zgf7kUJevJ1PFf-kZNdvB7EuXSL0A_6LWabdq6Uf_QQJDV7oWG/pub?gid=0&single=true&output=csv";
 
-        async function cargarDashboardSanitario() {
-            try {
-                const respuesta = await fetch(URL_LIVE_CSV);
-                const dataTexto = await respuesta.text();
-                
-                const lineas = dataTexto.split("\n").map(linea => linea.split(","));
-                const iieeMaestro = [];
-                let alertasCriticas = 0;
+        function parsearCSVLineas(texto) {
+            let lineas = [];
+            let fila = [];
+            let dentroComillas = false;
+            let celda = "";
+            for (let i = 0; i < texto.length; i++) {
+                let c = texto[i];
+                let prox = texto[i+1];
+                if (c === '"') {
+                    if (dentroComillas && prox === '"') { celda += '"'; i++; }
+                    else { dentroComillas = !dentroComillas; }
+                } else if (c === ',' && !dentroComillas) {
+                    fila.push(celda); celda = "";
+                } else if ((c === '\r' || c === '\n') && !dentroComillas) {
+                    if (c === '\r' && prox === '\n') i++;
+                    fila.push(celda);
+                    if (fila.length > 1 || fila[0] !== "") lineas.push(fila);
+                    fila = []; celda = "";
+                } else { celda += c; }
+            }
+            if (fila.length > 0 || celda !== "") { fila.push(celda); lineas.push(fila); }
+            return lineas;
+        }
 
-                for (let i = 1; i < lineas.length; i++) {
-                    const fila = lineas[i];
-                    if (!fila || fila.length < 10) continue;
-                    
-                    // Omite líneas con textos de cabeceras o dañadas por configuraciones externas
-                    if (fila[0].includes("CÓDIGO") || fila[0].includes("function") || fila[0].trim() === "") continue;
+        async function ejecutarPipelineSanitario() {
+            try {
+                const res = await fetch(URL_LIVE_CSV);
+                const texto = await res.text();
+                const matriz = parsearCSVLineas(texto);
+                const tabla = document.getElementById("tabla-nominal-cuerpo");
+                tabla.innerHTML = "";
+
+                let totalIIEE = 0, admCompletas = 0, sumCloroMeses = 0, sunassSI = 0, alertasCarga = 0;
+
+                for (let i = 1; i < matriz.length; i++) {
+                    const r = matriz[i];
+                    if (!r || r.length < 20 || r[0].includes("CÓDIGO") || r[0].trim() === "") continue;
+                    totalIIEE++;
 
                     const ie = {
-                        codigoLocal: fila[0]?.trim() || "",
-                        nombre: fila[1]?.trim() || "",
-                        ugel: fila[2]?.trim() || "",
-                        distrito: fila[3]?.trim() || "",
-                        responsable: fila[4]?.trim() || "",
-                        telefono: fila[5]?.trim() || "",
-                        f1_fam: parseFloat(fila[6]) || 0,
-                        f1_pca: parseFloat(fila[7]) || 0,
-                        f1_dg: parseFloat(fila[8]) || 0,
-                        montoSanitario: parseFloat(fila[9]) || 0,
-                        cloroMeses: [
-                            parseFloat(fila[10]) || 0, parseFloat(fila[11]) || 0, parseFloat(fila[12]) || 0, 
-                            parseFloat(fila[13]) || 0, parseFloat(fila[14]) || 0, parseFloat(fila[15]) || 0, 
-                            parseFloat(fila[16]) || 0
-                        ],
-                        sistemasCruzados: parseFloat(fila[17]) || 0,
-                        ultimaLlamada: fila[18]?.trim() || "--/--/----",
-                        observaciones: fila[19]?.trim() || "",
-                        urlFoto: fila[20]?.trim() || ""
+                        cod: r[0].trim(), name: r[1].trim(), ugel: r[2].trim(), dist: r[3].trim(), dir: r[4].trim(), tel: r[5].trim(),
+                        fam: r[6].trim(), pca: r[7].trim(), dg: r[8].trim(), monto: parseFloat(r[9]) || 0,
+                        juni: parseFloat(r[10])||0, juli: parseFloat(r[11])||0, agos: parseFloat(r[12])||0, seti: parseFloat(r[13])||0, octu: parseFloat(r[14])||0, novi: parseFloat(r[15])||0, dici: parseFloat(r[16])||0,
+                        sunass: r[17].trim().toUpperCase(), datass: r[18].trim().toUpperCase(), sivica: r[19].trim().toUpperCase(),
+                        fSunass: r[20].trim(), fDatass: r[21].trim(), fSivica: r[22].trim(),
+                        llamada: r[23].trim(), obs: r[24].trim(), foto: r[25]?.trim() || ""
                     };
-                    
-                    if(ie.f1_fam === 0.50) alertasCriticas++;
-                    iieeMaestro.push(ie);
+
+                    // Validación de Medios de Verificación Hipervinculados
+                    const hasFam = ie.fam.startsWith("http");
+                    const hasPca = ie.pca.startsWith("http");
+                    const hasDg = ie.dg.startsWith("http");
+                    if (hasFam && hasPca && hasDg) admCompletas++;
+
+                    const badgeFAM = hasFam ? `<a href="${ie.fam}" target="_blank" class="badge-admin online"><i class="bi bi-link-45deg"></i> FAM</a>` : `<span class="badge-admin offline">✖ FAM</span>`;
+                    const badgePCA = hasPca ? `<a href="${ie.pca}" target="_blank" class="badge-admin online"><i class="bi bi-link-45deg"></i> PCA</a>` : `<span class="badge-admin offline">✖ PCA</span>`;
+                    const badgeDG = hasDg ? `<a href="${ie.dg}" target="_blank" class="badge-admin online"><i class="bi bi-link-45deg"></i> DG</a>` : `<span class="badge-admin offline">✖ DG</span>`;
+
+                    // Cálculo Operativo de Cloro
+                    const totalCloroIE = ie.juni + ie.juli + ie.agos + ie.seti + ie.octu + ie.novi + ie.dici;
+                    sumCloroMeses += totalCloroIE;
+
+                    // Análisis de Sistemas Operativos Cruzados
+                    if (ie.sunass === "SI") sunassSI++;
+                    const badgeSunass = ie.sunass === "SI" ? '<span class="badge bg-success fs-8">SUNASS: SI</span>' : '<span class="badge bg-danger fs-8">SUNASS: NO</span>';
+                    const badgeDatass = ie.datass === "SI" ? '<span class="badge bg-success fs-8">DATASS: SI</span>' : '<span class="badge bg-secondary fs-8">DATASS: NO</span>';
+                    const badgeSivica = ie.sivica === "SI" ? '<span class="badge bg-success fs-8">SIVICA: SI</span>' : '<span class="badge bg-secondary fs-8">SIVICA: NO</span>';
+
+                    // Lógica Básica de Control de Alertas de Carga (Simulada para visualización de Fechas)
+                    let alertRow = false;
+                    if (ie.fSivica && parseInt(ie.fSivica.split("/")[0]) > 15) { alertRow = true; alertasCarga++; }
+
+                    let btnFoto = ie.foto.startsWith("http") ? `<a href="${ie.foto}" target="_blank" class="btn btn-xs btn-outline-success py-0 px-1 mt-1 fs-8 d-block text-center"><i class="bi bi-camera"></i> Foto</a>` : '';
+
+                    const html = `
+                        <tr class="${alertRow ? 'table-warning' : ''}">
+                            <td><span class="badge bg-dark font-monospace">${ie.cod}</span></td>
+                            <td><span class="fw-bold d-block text-dark">${ie.name}</span><small class="text-muted text-uppercase fs-8 font-monospace">${ie.ugel} ➔ ${ie.dist}</small></td>
+                            <td><div class="d-grid"><a href="tel:${ie.tel}" class="btn btn-sm btn-outline-primary text-start font-monospace py-0 px-2 fs-7"><i class="bi bi-telephone"></i> ${ie.dir}</a></div></td>
+                            <td>
+                                <div class="d-flex flex-column gap-1">
+                                    <div class="d-flex gap-1">${badgeFAM} ${badgePCA} ${badgeDG}</div>
+                                    <small class="fw-bold text-secondary">Inversión: S/. ${ie.monto.toFixed(2)}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-primary">${totalCloroIE} Meses Activos</div>
+                                <div style="font-size: 0.7rem;" class="text-muted font-monospace">J:${ie.juni} J:${ie.juli} A:${ie.agos} S:${ie.seti} O:${ie.octu} N:${ie.novi} D:${ie.dici}</div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column gap-1">
+                                    ${badgeSunass} ${badgeDatass} ${badgeSivica}
+                                </div>
+                            </td>
+                            <td>
+                                <small class="text-secondary d-block font-monospace fw-bold">Llamada: ${ie.llamada}</small>
+                                <p class="m-0 text-muted lh-sm fs-8" style="max-width: 180px;">${ie.obs}</p>
+                                ${btnFoto}
+                            </td>
+                        </tr>
+                    `;
+                    tabla.insertAdjacentHTML("beforeend", html);
                 }
 
-                document.getElementById("kpi-alertas").innerText = `${alertasCriticas} Crítica(s)`;
-                procesarMetricasGerenciales(iieeMaestro);
+                // Inyección de KPIs de Alta Dirección
+                document.getElementById("kpi-ei-03").innerText = `${admCompletas} / 14 (${((admCompletas/14)*100).toFixed(1)}%)`;
+                document.getElementById("kpi-cloro-total").innerText = `${sumCloroMeses} Meses`;
+                document.getElementById("kpi-sunass-cobertura").innerText = `${sunassSI} / 14`;
+                document.getElementById("kpi-alertas-operativas").innerText = `${alertasCarga} Crítica(s)`;
 
-            } catch (error) {
-                console.error("Error en el pipeline de datos:", error);
-                document.getElementById("kpi-alertas").innerText = "Error link";
-            }
+            } catch (err) { console.error("Error general: ", err); }
         }
-
-        function procesarMetricasGerenciales(iiee) {
-            let cumplidosMantenimiento = 0;
-            let cumplidosCloro = 0;
-            const totalIIEE = 14;
-
-            iiee.forEach(ie => {
-                const cumpleMto = (ie.f1_fam === 1.00 && ie.f1_pca === 1.00 && ie.f1_dg === 1.00 && ie.montoSanitario > 0);
-                if (cumpleMto) cumplidosMantenimiento++;
-
-                const totalMesesOK = ie.cloroMeses.reduce((acc, val) => acc + val, 0);
-                const cumpleCloro = (cumpleMto && totalMesesOK >= 5 && ie.sistemasCruzados >= 2);
-                if (cumpleCloro) cumplidosCloro++;
-
-                renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK);
-            });
-
-            document.getElementById("kpi-ei-03").innerText = `${cumplidosMantenimiento} / ${totalIIEE} (${((cumplidosMantenimiento/totalIIEE)*100).toFixed(1)}%)`;
-            document.getElementById("kpi-ai-05").innerText = `${cumplidosCloro} / ${cumplidosMantenimiento || 1} (${cumplidosMantenimiento > 0 ? ((cumplidosCloro/cumplidosMantenimiento)*100).toFixed(1) : 0.0}%)`;
-        }
-
-        function renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK) {
-            const tablaCuerpo = document.getElementById("tabla-nominal-cuerpo");
-            
-            const badgeFAM = ie.f1_fam === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : (ie.f1_fam === 0.50 ? '<span class="badge bg-warning text-dark">⏳ EN REVISIÓN</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>');
-            const badgePCA = ie.f1_pca === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
-            const badgeDG = ie.f1_dg === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
-
-            const controlFoto = ie.urlFoto !== "" && ie.urlFoto.toLowerCase().startsWith("http")
-                ? `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-outline-success fw-bold"><i class="bi bi-camera me-1"></i> Ver Foto</a>` 
-                : '<span class="text-muted small font-monospace"><i class="bi bi-camera-video-off me-1"></i> Sin visita</span>';
-
-            const filaHTML = `
-                <tr class="${ie.f1_fam === 0.50 ? 'table-warning bg-opacity-10' : ''}">
-                    <td><span class="badge bg-dark font-monospace">${ie.codigoLocal}</span></td>
-                    <td>
-                        <span class="fw-bold text-dark d-block">${ie.nombre}</span>
-                        <small class="text-muted text-uppercase fs-8 font-monospace">${ie.ugel} ➔ ${ie.distrito}</small>
-                    </td>
-                    <td>
-                        <div class="d-grid">
-                            <a href="tel:${ie.telefono}" class="btn btn-sm btn-outline-primary text-start font-monospace py-1">
-                                <i class="bi bi-telephone-outbound me-1"></i> ${ie.responsable}
-                            </a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="small d-flex flex-column gap-1">
-                            <div>FAM: ${badgeFAM}</div>
-                            <div>PCA: ${badgePCA}</div>
-                            <div>DG: ${badgeDG}</div>
-                            <div class="fw-bold text-secondary">Inversión: S/. ${ie.montoSanitario.toFixed(2)}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="fw-bold text-${totalMesesOK >= 5 ? 'success' : 'danger'} fs-6">${totalMesesOK} / 7 Meses</div>
-                        <small class="text-muted d-block font-monospace">Plataformas: ${ie.sistemasCruzados.toFixed(0)} / 2</small>
-                    </td>
-                    <td>${controlFoto}</td>
-                    <td>
-                        <small class="text-secondary d-block font-monospace fw-bold">Llamada: ${ie.ultimaLlamada}</small>
-                        <p class="m-0 text-muted lh-sm" style="font-size: 0.8rem;">${ie.observaciones}</p>
-                    </td>
-                </tr>
-            `;
-            tablaCuerpo.insertAdjacentHTML("beforeend", filaHTML);
-        }
-
-        document.addEventListener("DOMContentLoaded", cargarDashboardSanitario);
+        document.addEventListener("DOMContentLoaded", ejecutarPipelineSanitario);
     </script>
 </body>
 </html>
