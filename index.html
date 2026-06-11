@@ -70,7 +70,7 @@
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Avance EI-03.01</h6>
                             <h3 class="fw-bold m-0" id="kpi-ei-03">0 / 14 (0.0%)</h3>
-                            <small class="text-muted">IIEE con FAM/PCA/DG verificadas</small>
+                            <small class="text-muted">IIEE con FAM/PCA/DG verificadas[cite: 1]</small>
                         </div>
                         <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
                             <i class="bi bi-tools fs-3"></i>
@@ -131,7 +131,7 @@
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h5 class="fw-bold m-0 text-dark">Monitoreo Nominal de las 14 IIEE Estratégicas</h5>
+                            <h5 class="fw-bold m-0 text-dark">Monitorea Nominal de las 14 IIEE Estratégicas</h5>
                             <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)[cite: 1, 2]. Pica en los estados verdes para auditar los documentos oficiales.</p>
                         </div>
                     </div>
@@ -159,22 +159,63 @@
         </div>
     </div>
 
-    <!-- MOTOR LÓGICO EVOLUCIONADO INTEGRADO -->
+    <!-- MOTOR BLINDADO CONTRA ERRORES DE ENLACES CSV -->
     <script>
-        // PEGA TU ENLACE DE GOOGLE SHEETS (CSV) AQUÍ ABAJO
+        // TU ENLACE DE GOOGLE SHEETS EN MODO LIVE-CSV
         const URL_LIVE_CSV = "https://docs.google.com/spreadsheets/d/1BZCDJwj-zhi5k-YKsUD8Zo6g8Wc-Ujm1HlvlNXyIEtM/pub?output=csv";
+
+        // Parser avanzado que maneja comillas y enlaces largos sin romper las columnas
+        function parsearCSVAvanzado(texto) {
+            let lineas = [];
+            let fila = [];
+            let dentroDeComillas = false;
+            let valorCelda = "";
+
+            for (let i = 0; i < texto.length; i++) {
+                let char = texto[i];
+                let siguienteChar = texto[i+1];
+
+                if (char === '"') {
+                    if (dentroDeComillas && siguienteChar === '"') {
+                        valorCelda += '"';
+                        i++;
+                    } else {
+                        dentroDeComillas = !dentroDeComillas;
+                    }
+                } else if (char === ',' && !dentroDeComillas) {
+                    fila.push(valorCelda);
+                    valorCelda = "";
+                } else if ((char === '\r' || char === '\n') && !dentroDeComillas) {
+                    if (char === '\r' && siguienteChar === '\n') { i++; }
+                    fila.push(valorCelda);
+                    if (fila.length > 1 || fila[0] !== "") {
+                        lineas.push(fila);
+                    }
+                    fila = [];
+                    valorCelda = "";
+                } else {
+                    valorCelda += char;
+                }
+            }
+            if (fila.length > 0 || valorCelda !== "") {
+                fila.push(valorCelda);
+                lineas.push(fila);
+            }
+            return lineas;
+        }
 
         async function cargarDashboardSanitario() {
             try {
                 const respuesta = await fetch(URL_LIVE_CSV);
                 const dataTexto = await respuesta.text();
                 
-                const lineas = dataTexto.split("\n").map(linea => linea.split(","));
+                // Ejecuta el procesador de seguridad avanzada
+                const matrizDatos = parsearCSVAvanzado(dataTexto);
                 const iieeMaestro = [];
                 let alertasCriticas = 0;
 
-                for (let i = 1; i < lineas.length; i++) {
-                    const fila = lineas[i];
+                for (let i = 1; i < matrizDatos.length; i++) {
+                    const fila = matrizDatos[i];
                     if (!fila || fila.length < 10) continue;
                     
                     const ie = {
@@ -184,7 +225,6 @@
                         distrito: fila[3]?.trim() || "",
                         responsable: fila[4]?.trim() || "",
                         telefono: fila[5]?.trim() || "",
-                        // Soporta texto de enlace URL o valor numérico puro
                         f1_fam: fila[6]?.trim() || "0",
                         f1_pca: fila[7]?.trim() || "0",
                         f1_dg: fila[8]?.trim() || "0",
@@ -219,10 +259,9 @@
             const totalIIEE = iiee.length;
 
             iiee.forEach(ie => {
-                // Se asume aprobado (1.00) si es el número exacto o si contiene un enlace URL directo
-                const famOk = (ie.f1_fam === "1.00" || ie.f1_fam.startsWith("http"));
-                const pcaOk = (ie.f1_pca === "1.00" || ie.f1_pca.startsWith("http"));
-                const dgOk = (ie.f1_dg === "1.00" || ie.f1_dg.startsWith("http"));
+                const famOk = (ie.f1_fam === "1.00" || ie.f1_fam.toLowerCase().startsWith("http"));
+                const pcaOk = (ie.f1_pca === "1.00" || ie.f1_pca.toLowerCase().startsWith("http"));
+                const dgOk = (ie.f1_dg === "1.00" || ie.f1_dg.toLowerCase().startsWith("http"));
 
                 const cumpleMto = (famOk && pcaOk && dgOk && ie.montoSanitario > 0);
                 if (cumpleMto) cumplidosMantenimiento++;
@@ -238,9 +277,8 @@
             document.getElementById("kpi-ai-05").innerText = `${cumplidosCloro} / ${cumplidosMantenimiento || 1} (${cumplidosMantenimiento > 0 ? ((cumplidosCloro/cumplidosMantenimiento)*100).toFixed(1) : 0.0}%)`;
         }
 
-        // Función auxiliar para construir el Badge inteligente (Texto o Enlace de Drive)
         function construirBadgeHito(valorCelda, labelHito) {
-            if (valorCelda.startsWith("http")) {
+            if (valorCelda.toLowerCase().startsWith("http")) {
                 return `<a href="${valorCelda}" target="_blank" class="badge bg-success badge-link"><i class="bi bi-file-earmark-pdf me-1"></i> ${labelHito}: VERIFICADA</a>`;
             } else if (valorCelda === "1.00") {
                 return `<span class="badge bg-success">${labelHito}: VERIFICADA</span>`;
@@ -254,12 +292,11 @@
         function renderizarFilaNominal(ie, famOk, pcaOk, dgOk, cumpleCloro, totalMesesOK) {
             const tablaCuerpo = document.getElementById("tabla-nominal-cuerpo");
             
-            // Construcción reactiva de los 3 botones administrativos
             const badgeFAM = construirBadgeHito(ie.f1_fam, "FAM");
             const badgePCA = construirBadgeHito(ie.f1_pca, "PCA");
             const badgeDG = construirBadgeHito(ie.f1_dg, "DG");
 
-            const controlFoto = ie.urlFoto !== "" && ie.urlFoto.startsWith("http")
+            const controlFoto = ie.urlFoto !== "" && ie.urlFoto.toLowerCase().startsWith("http")
                 ? `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-outline-success fw-bold"><i class="bi bi-camera me-1"></i> Ver Foto</a>` 
                 : '<span class="text-muted small font-monospace"><i class="bi bi-camera-video-off me-1"></i> Sin visita</span>';
 
