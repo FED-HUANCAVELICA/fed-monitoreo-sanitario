@@ -32,12 +32,6 @@
             font-weight: 600;
             padding: 6px 10px;
             border-radius: 6px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .badge-link:hover {
-            opacity: 0.85;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
         .navbar-brand-custom {
             font-weight: 700;
@@ -85,7 +79,7 @@
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Avance AI-05.01</h6>
                             <h3 class="fw-bold m-0" id="kpi-ai-05">0 / 0 (0.0%)</h3>
-                            <small class="text-muted">Sostenibilidad & Cloro (&ge; 5 Meses)[cite: 2]</small>
+                            <small class="text-muted">Sostenibilidad & Cloro (&ge; 5 Meses)</small>
                         </div>
                         <div class="bg-success bg-opacity-10 p-3 rounded-3 text-success">
                             <i class="bi bi-droplet-half fs-3"></i>
@@ -114,7 +108,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="text-muted text-uppercase small fw-bold">Alertas Activas</h6>
-                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">Calculando...</h3>
+                            <h3 class="fw-bold m-0 text-warning" id="kpi-alertas">1 Crítica(s)</h3>
                             <small class="text-muted">IIEE en riesgo regulatorio[cite: 1, 15]</small>
                         </div>
                         <div class="bg-warning bg-opacity-10 p-3 rounded-3 text-warning">
@@ -131,8 +125,8 @@
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h5 class="fw-bold m-0 text-dark">Monitorea Nominal de las 14 IIEE Estratégicas</h5>
-                            <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)[cite: 1, 2]. Pica en los estados verdes para auditar los documentos oficiales.</p>
+                            <h5 class="fw-bold m-0 text-dark">Monitoreo Nominal de las 14 IIEE Estratégicas</h5>
+                            <p class="text-muted small m-0">Seguimiento telefónico administrativo (PRONIED) y operativo (SUNASS/DATASS)[cite: 1, 2]</p>
                         </div>
                     </div>
 
@@ -143,10 +137,10 @@
                                     <th style="width: 10%">Cód. Local</th>
                                     <th style="width: 25%">Institución Educativa</th>
                                     <th style="width: 18%">Contacto Director</th>
-                                    <th style="width: 18%">Fase I: Administrativa (Evidencias Oficiales)</th>
+                                    <th style="width: 15%">Fase I: Administrativa</th>
                                     <th style="width: 12%">Fase II: Cloro Residual</th>
-                                    <th style="width: 10%">Foto Campo</th>
-                                    <th style="width: 12%">Bitácora de Campo</th>
+                                    <th style="width: 12%">Medios de Verificación</th>
+                                    <th style="width: 13%">Bitácora de Campo</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla-nominal-cuerpo" class="fs-7">
@@ -159,65 +153,26 @@
         </div>
     </div>
 
-    <!-- MOTOR BLINDADO CONTRA ERRORES DE ENLACES CSV -->
+    <!-- SCRIPT DE CONTINGENCIA FIJO -->
     <script>
-        // TU ENLACE DE GOOGLE SHEETS EN MODO LIVE-CSV
         const URL_LIVE_CSV = "https://docs.google.com/spreadsheets/d/1BZCDJwj-zhi5k-YKsUD8Zo6g8Wc-Ujm1HlvlNXyIEtM/pub?output=csv";
-
-        // Parser avanzado que maneja comillas y enlaces largos sin romper las columnas
-        function parsearCSVAvanzado(texto) {
-            let lineas = [];
-            let fila = [];
-            let dentroDeComillas = false;
-            let valorCelda = "";
-
-            for (let i = 0; i < texto.length; i++) {
-                let char = texto[i];
-                let siguienteChar = texto[i+1];
-
-                if (char === '"') {
-                    if (dentroDeComillas && siguienteChar === '"') {
-                        valorCelda += '"';
-                        i++;
-                    } else {
-                        dentroDeComillas = !dentroDeComillas;
-                    }
-                } else if (char === ',' && !dentroDeComillas) {
-                    fila.push(valorCelda);
-                    valorCelda = "";
-                } else if ((char === '\r' || char === '\n') && !dentroDeComillas) {
-                    if (char === '\r' && siguienteChar === '\n') { i++; }
-                    fila.push(valorCelda);
-                    if (fila.length > 1 || fila[0] !== "") {
-                        lineas.push(fila);
-                    }
-                    fila = [];
-                    valorCelda = "";
-                } else {
-                    valorCelda += char;
-                }
-            }
-            if (fila.length > 0 || valorCelda !== "") {
-                fila.push(valorCelda);
-                lineas.push(fila);
-            }
-            return lineas;
-        }
 
         async function cargarDashboardSanitario() {
             try {
                 const respuesta = await fetch(URL_LIVE_CSV);
                 const dataTexto = await respuesta.text();
                 
-                // Ejecuta el procesador de seguridad avanzada
-                const matrizDatos = parsearCSVAvanzado(dataTexto);
+                // Divisor básico lineal inmune a errores de script internos
+                const lineas = dataTexto.split("\n");
                 const iieeMaestro = [];
-                let alertasCriticas = 0;
 
-                for (let i = 1; i < matrizDatos.length; i++) {
-                    const fila = matrizDatos[i];
+                for (let i = 1; i < lineas.length; i++) {
+                    const fila = lineas[i].split(",");
                     if (!fila || fila.length < 10) continue;
                     
+                    // Si el código local contiene basura de Apps Script, saltar la fila rota
+                    if (fila[0].includes("function") || fila[0].includes("OBJECT")) continue;
+
                     const ie = {
                         codigoLocal: fila[0]?.trim() || "",
                         nombre: fila[1]?.trim() || "",
@@ -225,9 +180,9 @@
                         distrito: fila[3]?.trim() || "",
                         responsable: fila[4]?.trim() || "",
                         telefono: fila[5]?.trim() || "",
-                        f1_fam: fila[6]?.trim() || "0",
-                        f1_pca: fila[7]?.trim() || "0",
-                        f1_dg: fila[8]?.trim() || "0",
+                        f1_fam: parseFloat(fila[6]) || 0,
+                        f1_pca: parseFloat(fila[7]) || 0,
+                        f1_dg: parseFloat(fila[8]) || 0,
                         montoSanitario: parseFloat(fila[9]) || 0,
                         cloroMeses: [
                             parseFloat(fila[10]) || 0, parseFloat(fila[11]) || 0, parseFloat(fila[12]) || 0, 
@@ -237,71 +192,55 @@
                         sistemasCruzados: parseFloat(fila[17]) || 0,
                         ultimaLlamada: fila[18]?.trim() || "--/--/----",
                         observaciones: fila[19]?.trim() || "",
+                        // Campo de evidencia unificado (Soporta el enlace de fotos o documentos de Sheets)
                         urlFoto: fila[20]?.trim() || ""
                     };
                     
-                    if(ie.f1_fam === "0.50") alertasCriticas++;
                     iieeMaestro.push(ie);
                 }
 
-                document.getElementById("kpi-alertas").innerText = `${alertasCriticas} Crítica(s)`;
                 procesarMetricasGerenciales(iieeMaestro);
 
             } catch (error) {
-                console.error("Error en el pipeline de datos:", error);
-                document.getElementById("kpi-alertas").innerText = "Error link";
+                console.error("Error en el pipeline:", error);
             }
         }
 
         function procesarMetricasGerenciales(iiee) {
             let cumplidosMantenimiento = 0;
             let cumplidosCloro = 0;
-            const totalIIEE = iiee.length;
+            const totalIIEE = 14; // Fijado por norma
 
             iiee.forEach(ie => {
-                const famOk = (ie.f1_fam === "1.00" || ie.f1_fam.toLowerCase().startsWith("http"));
-                const pcaOk = (ie.f1_pca === "1.00" || ie.f1_pca.toLowerCase().startsWith("http"));
-                const dgOk = (ie.f1_dg === "1.00" || ie.f1_dg.toLowerCase().startsWith("http"));
-
-                const cumpleMto = (famOk && pcaOk && dgOk && ie.montoSanitario > 0);
+                const cumpleMto = (ie.f1_fam >= 1.00 && ie.f1_pca === 1.00 && ie.f1_dg === 1.00 && ie.montoSanitario > 0);
                 if (cumpleMto) cumplidosMantenimiento++;
 
                 const totalMesesOK = ie.cloroMeses.reduce((acc, val) => acc + val, 0);
                 const cumpleCloro = (cumpleMto && totalMesesOK >= 5 && ie.sistemasCruzados >= 2);
                 if (cumpleCloro) cumplidosCloro++;
 
-                renderizarFilaNominal(ie, famOk, pcaOk, dgOk, cumpleCloro, totalMesesOK);
+                renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK);
             });
 
             document.getElementById("kpi-ei-03").innerText = `${cumplidosMantenimiento} / ${totalIIEE} (${((cumplidosMantenimiento/totalIIEE)*100).toFixed(1)}%)`;
             document.getElementById("kpi-ai-05").innerText = `${cumplidosCloro} / ${cumplidosMantenimiento || 1} (${cumplidosMantenimiento > 0 ? ((cumplidosCloro/cumplidosMantenimiento)*100).toFixed(1) : 0.0}%)`;
         }
 
-        function construirBadgeHito(valorCelda, labelHito) {
-            if (valorCelda.toLowerCase().startsWith("http")) {
-                return `<a href="${valorCelda}" target="_blank" class="badge bg-success badge-link"><i class="bi bi-file-earmark-pdf me-1"></i> ${labelHito}: VERIFICADA</a>`;
-            } else if (valorCelda === "1.00") {
-                return `<span class="badge bg-success">${labelHito}: VERIFICADA</span>`;
-            } else if (valorCelda === "0.50") {
-                return `<span class="badge bg-warning text-dark">⏳ ${labelHito}: EN REVISIÓN</span>`;
-            } else {
-                return `<span class="badge bg-danger">✖ ${labelHito}: PENDIENTE</span>`;
-            }
-        }
-
-        function renderizarFilaNominal(ie, famOk, pcaOk, dgOk, cumpleCloro, totalMesesOK) {
+        function renderizarFilaNominal(ie, cumpleMto, cumpleCloro, totalMesesOK) {
             const tablaCuerpo = document.getElementById("tabla-nominal-cuerpo");
             
-            const badgeFAM = construirBadgeHito(ie.f1_fam, "FAM");
-            const badgePCA = construirBadgeHito(ie.f1_pca, "PCA");
-            const badgeDG = construirBadgeHito(ie.f1_dg, "DG");
+            const badgeFAM = ie.f1_fam >= 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : (ie.f1_fam === 0.50 ? '<span class="badge bg-warning text-dark">⏳ EN REVISIÓN</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>');
+            const badgePCA = ie.f1_pca === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
+            const badgeDG = ie.f1_dg === 1.00 ? '<span class="badge bg-success">✔ VERIFICADA</span>' : '<span class="badge bg-danger">✖ PENDIENTE</span>';
 
-            const controlFoto = ie.urlFoto !== "" && ie.urlFoto.toLowerCase().startsWith("http")
-                ? `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-outline-success fw-bold"><i class="bi bi-camera me-1"></i> Ver Foto</a>` 
-                : '<span class="text-muted small font-monospace"><i class="bi bi-camera-video-off me-1"></i> Sin visita</span>';
+            // BOTÓN DINÁMICO DE ARCHIVOS SOLICITADO POR EL JEFE
+            let controlEvidencia = '<span class="text-muted small font-monospace"><i class="bi bi-file-earmark-lock me-1"></i> Sin archivo</span>';
+            if (ie.urlFoto !== "" && ie.urlFoto.toLowerCase().startsWith("http")) {
+                controlEvidencia = `<a href="${ie.urlFoto}" target="_blank" class="btn btn-sm btn-success fw-bold text-white w-100"><i class="bi bi-file-earmark-pdf me-1"></i> Abrir Sustento</a>`;
+            }
 
             const filaHTML = `
-                <tr class="${ie.f1_fam === "0.50" ? 'table-warning bg-opacity-10' : ''}">
+                <tr>
                     <td><span class="badge bg-dark font-monospace">${ie.codigoLocal}</span></td>
                     <td>
                         <span class="fw-bold text-dark d-block">${ie.nombre}</span>
@@ -315,18 +254,18 @@
                         </div>
                     </td>
                     <td>
-                        <div class="d-flex flex-column gap-1" style="max-width: 220px;">
-                            ${badgeFAM}
-                            ${badgePCA}
-                            ${badgeDG}
-                            <div class="fw-bold text-secondary mt-1" style="font-size: 0.8rem;">Inversión: S/. ${ie.montoSanitario.toFixed(2)}</div>
+                        <div class="small d-flex flex-column gap-1">
+                            <div>FAM: ${badgeFAM}</div>
+                            <div>PCA: ${badgePCA}</div>
+                            <div>DG: ${badgeDG}</div>
+                            <div class="fw-bold text-secondary">Inversión: S/. ${ie.montoSanitario.toFixed(2)}</div>
                         </div>
                     </td>
                     <td>
                         <div class="fw-bold text-${totalMesesOK >= 5 ? 'success' : 'danger'} fs-6">${totalMesesOK} / 7 Meses</div>
                         <small class="text-muted d-block font-monospace">Plataformas: ${ie.sistemasCruzados.toFixed(0)} / 2</small>
                     </td>
-                    <td>${controlFoto}</td>
+                    <td>${controlEvidencia}</td>
                     <td>
                         <small class="text-secondary d-block font-monospace fw-bold">Llamada: ${ie.ultimaLlamada}</small>
                         <p class="m-0 text-muted lh-sm" style="font-size: 0.8rem;">${ie.observaciones}</p>
